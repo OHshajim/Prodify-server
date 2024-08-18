@@ -1,12 +1,12 @@
 # Prodify - Backend
 
-Live Link : https://prodify-232d8.web.app/
+Live Link URL : https://prodify-232d8.web.app/
 
-Client Side Link : https://github.com/OHshajim/Prodify
+Client Side Repository Link : https://github.com/OHshajim/Prodify
 
 ## Project Overview
 
-This backend server is part of Prodify, single-page application designed to allow users to perform search and filtering operations on a set of products. The backend is responsible for handling data storage, retrieval, and API endpoints for product management, including functionalities such as pagination, searching, categorization, sorting, and authentication.
+This backend server is the back-end of Prodify, single-page application designed to allow users to perform search and filtering operations on a set of products. The backend is responsible for handling data storage, retrieval, and API endpoints for product management, including functionalities such as pagination, searching, categorization, sorting, and authentication.
 
 ## Features
 
