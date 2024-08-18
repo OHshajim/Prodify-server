@@ -92,7 +92,7 @@ async function run() {
         console.log(finalQuery);
         // Find, sort, and return products
         const result = await ProductCollection.find(finalQuery)
-          .sort(sortCriteria)
+          .sort(sortCriteria).skip(page*10).limit(10)
           .toArray();
         res.send(result);
       } catch (error) {
