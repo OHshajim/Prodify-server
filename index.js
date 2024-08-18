@@ -31,8 +31,32 @@ async function run() {
     const UserCollection = client.db("Prodify").collection("users");
 
     app.get("/products", async (req, res) => {
-      console.log("called");
-      const result = await ProductCollection.find().toArray();
+      const { search, sortBy } = req.query;
+      console.log(search, sortBy);
+
+      let query = {};
+      if (search) {
+        query = {
+          name: { $regex: search, $options: "i" },
+        };
+      }
+      let sortCriteria = {};
+      switch (sortBy) {
+        case "price:1":
+          sortCriteria = { price: 1 }; // Sort by price in ascending order
+          break;
+        case "price:-1":
+          sortCriteria = { price: -1 }; // Sort by price in descending order
+          break;
+        case "date":
+          sortCriteria = { creationDate: -1 }; // Sort by creation date in descending order
+          break;
+        default:
+          sortCriteria = {}; // No sorting
+      }
+      const result = await ProductCollection.find(query)
+        .sort(sortCriteria)
+        .toArray();
       res.send(result);
     });
   } finally {
