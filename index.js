@@ -28,18 +28,44 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
     const ProductCollection = client.db("Prodify").collection("products");
-    const UserCollection = client.db("Prodify").collection("users");
+    app.get("/totalProducts",async(req,res)=>{
+      const result = (await ProductCollection.find().toArray()).length
+       res.json(result)
+    })
 
     app.get("/products", async (req, res) => {
-      const { search, sortBy } = req.query;
-      console.log(search, sortBy);
+      const { search, sortBy, Brand, Category, MinPrice, MaxPrice ,page} = req.query;
+      // console.log(search, sortBy, Brand, Category, MinPrice, MaxPrice);
 
-      let query = {};
+      let query = {}; // This will handle search
+      let filterCriteria = {}; // This will handle filtering by brand, category, and price range
+
+      // Search by name
       if (search) {
-        query = {
-          name: { $regex: search, $options: "i" },
-        };
+        query.name = { $regex: search, $options: "i" };
       }
+
+      // Filter by Brand
+      if (Brand) {
+        filterCriteria = { ...filterCriteria, brand: Brand };
+      }
+
+      // Filter by Category
+      if (Category) {
+        filterCriteria = { ...filterCriteria, category: Category };
+      }
+
+      // Filter by Price Range
+      console.log(MinPrice , MaxPrice );
+      
+      if (MinPrice || MaxPrice ) {
+        filterCriteria = { ...filterCriteria, price: {} };
+        if (MinPrice > 0) filterCriteria.price.$gte = parseFloat(MinPrice);
+        if (MaxPrice > 0) filterCriteria.price.$lte = parseFloat(MaxPrice);
+      }
+      // console.log(filterCriteria);
+      
+      // Sorting Criteria
       let sortCriteria = {};
       switch (sortBy) {
         case "price:1":
@@ -54,10 +80,24 @@ async function run() {
         default:
           sortCriteria = {}; // No sorting
       }
-      const result = await ProductCollection.find(query)
-        .sort(sortCriteria)
-        .toArray();
-      res.send(result);
+
+      try {
+        // Merge query and filterCriteria
+        let finalQuery = {};
+        if (query.name["$regex"] !== " " && filterCriteria) {
+          finalQuery = { ...query, ...filterCriteria };
+        } else if (filterCriteria && filterCriteria.price !== " ") {
+          finalQuery = { ...filterCriteria };
+        }
+        console.log(finalQuery);
+        // Find, sort, and return products
+        const result = await ProductCollection.find(finalQuery)
+          .sort(sortCriteria)
+          .toArray();
+        res.send(result);
+      } catch (error) {
+        res.status(500).send("Error retrieving products: " + error.message);
+      }
     });
   } finally {
     // Ensures that the client will close when you finish/error
