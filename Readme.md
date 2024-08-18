@@ -2,7 +2,7 @@
 
 Live Link : https://prodify-232d8.web.app/
 
-Server Side Link : https://github.com/OHshajim/Prodify
+Client Side Link : https://github.com/OHshajim/Prodify
 
 ## Project Overview
 
@@ -46,7 +46,7 @@ Ensure you have the following installed:
    ```bash
    npm install express cors mongodb dotenv
    ```
-4. **Create a .env file in the root directory with your Firebase credentials:**
+4. **Create a .env file in the root directory with your mongodb URL:**
 
 ```bash
    DB_URL = "URL"
