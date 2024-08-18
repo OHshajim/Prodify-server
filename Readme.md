@@ -38,3 +38,21 @@ Ensure you have the following installed:
    ```bash
    git clone https://github.com/OHshajim/Prodify-server.git
    ```
+2. **Navigate to the project directory**
+   ```bash
+   cd Prodify-server
+   ```
+3. **Install dependencies**
+   ```bash
+   npm install express cors mongodb dotenv
+   ```
+4. **Create a .env file in the root directory with your Firebase credentials:**
+
+```bash
+   DB_URL = "URL"
+```
+
+5. **Run the frontend server**
+   ```bash
+   node index.js
+   ```
